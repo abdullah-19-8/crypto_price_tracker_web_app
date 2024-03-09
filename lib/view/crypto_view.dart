@@ -19,10 +19,10 @@ class _CryptoViewState extends State<CryptoView> {
 
   @override
   void initState() {
-    super.initState();
     _cryptoBloc = CryptoViewModel().cryptoBloc;
-    _cryptoBloc.subscribeToMarketDataStreams();
-    _cryptoBloc.add(ConnectToWebSocket());
+    _cryptoBloc.add(ConnectToWebSocket(widget.coin.toUpperCase()));
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {});
+    super.initState();
   }
 
   @override
@@ -37,7 +37,7 @@ class _CryptoViewState extends State<CryptoView> {
           child: BlocBuilder<CryptoBloc, CryptoState>(
             bloc: _cryptoBloc,
             builder: (context, state) {
-              if (state.cryptoData != null) {
+              if (state.cryptoData?.data != null) {
                 final crypto = state.cryptoData?.data?[0];
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.center,

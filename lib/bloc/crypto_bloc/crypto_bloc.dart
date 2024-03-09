@@ -17,7 +17,7 @@ class CryptoBloc extends Bloc<CryptoEvent, CryptoState> {
     on<ConnectToWebSocket>((event, emit) {
       print('object');
       channel = HtmlWebSocketChannel.connect('wss://ws.kraken.com/v2');
-      subscribeToMarketDataStreams();
+      subscribeToMarketDataStreams(event.coin);
       emit(
         state,
       ); // Emit the current state to indicate the connection is established
@@ -38,55 +38,19 @@ class CryptoBloc extends Bloc<CryptoEvent, CryptoState> {
   }
 
   Stream<CryptoState> mapEventToState(CryptoEvent event) async* {
-    if (event is FetchCryptoData) {
-      // Perform API call or data fetching logic here
-      // For simplicity, let's use sample data
-      final sampleData = {
-        "channel": "ohlc",
-        "timestamp": "2022-06-13T08:09:10.123456Z",
-        "data": [
-          {
-            "close": 30001.4,
-            "high": 3000.9,
-            "low": 3000.1,
-            "open": 3000.3,
-            "symbol": "BTC/USD",
-            "interval_begin": "2022-06-12T08:09:10.123456Z",
-            "trades": 1,
-            "volume": 0.0001,
-            "vwap": 3000.3,
-            "interval": 5,
-            "timestamp": "2022-06-13T08:09:10.123456Z",
-          }
-        ],
-        "type": "snapshot"
-      };
-
-      final Crypto? cryptoData = Crypto.fromJson(sampleData);
-
-      yield CryptoState(cryptoData, price);
-    } else if (event is ConnectToWebSocket) {
-      // print('object');
-      // channel = IOWebSocketChannel.connect('wss://ws.kraken.com/v2');
-      // subscribeToMarketDataStreams();
-      // yield state; // Yield the current state to indicate the connection is established
-      channel?.stream.listen((message) {
-        crypto = Crypto.fromJson(message);
-        if (crypto?.data != null) {
-          price = crypto?.data?[0].open;
-        }
-        add(FetchCryptoData()); // Trigger data update when WebSocket receives new data
-      });
+    if (event is ConnectToWebSocket) {
       yield CryptoState(crypto, price);
     }
   }
 
-  void subscribeToMarketDataStreams() {
+  void callSubscribe() {}
+
+  void subscribeToMarketDataStreams(String coin) {
     channel?.sink.add(json.encode({
       "method": "subscribe",
       "params": {
         "channel": "ohlc",
-        "symbol": ["BTC/USD"],
+        "symbol": ["$coin/USD"],
         "interval": 5
       }
     }));

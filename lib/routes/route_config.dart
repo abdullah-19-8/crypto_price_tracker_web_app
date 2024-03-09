@@ -19,10 +19,12 @@ class RouteConfig {
         GoRoute(
           path: "/crypto/:coin",
           name: RouteNames.cryptoView,
-          builder: (context, state) {
+          pageBuilder: (context, state) {
             final coin = state.pathParameters["coin"];
-            return CryptoView(
-              coin: coin ?? "BTC",
+            return MaterialPage(
+              child: CryptoView(
+                coin: coin ?? "BTC",
+              ),
             );
           },
         ),
