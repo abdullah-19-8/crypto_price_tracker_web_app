@@ -15,10 +15,12 @@ class CryptoBloc extends Bloc<CryptoEvent, CryptoState> {
 
   CryptoBloc() : super(CryptoState(null, null)) {
     on<ConnectToWebSocket>((event, emit) {
+      print('object');
       channel = IOWebSocketChannel.connect('wss://ws.kraken.com/v2');
       subscribeToMarketDataStreams();
       emit(
-          state); // Emit the current state to indicate the connection is established
+        state,
+      ); // Emit the current state to indicate the connection is established
       channel?.stream.listen((message) {
         Map<String, dynamic> jsonMap = jsonDecode(message);
         crypto = Crypto.fromJson(jsonMap);
@@ -28,30 +30,36 @@ class CryptoBloc extends Bloc<CryptoEvent, CryptoState> {
         }
         add(FetchCryptoData()); // Trigger data update when WebSocket receives new data
       });
+      // Don't emit CryptoState here
     });
 
     on<FetchCryptoData>((event, emit) {
       // Implement the logic to handle the FetchCryptoData event
       // For simplicity, let's use sample data
-      final sampleData = [
-        {
-          "close": 30001.4,
-          "high": 3000.9,
-          "low": 3000.1,
-          "open": 3000.3,
-          "symbol": "BTC/USD",
-          "intervalBegin": "2022-06-12T08:09:10.123456Z",
-          "trades": 1,
-          "volume": 0.0001,
-          "vwap": 3000.3,
-          "interval": 5,
-          "timestamp": "2022-06-13T08:09:10.123456Z",
-        }
-      ];
+      final sampleData = {
+        "channel": "ohlc",
+        "timestamp": "2022-06-13T08:09:10.123456Z",
+        "data": [
+          {
+            "close": 30001.4,
+            "high": 3000.9,
+            "low": 3000.1,
+            "open": 3000.3,
+            "symbol": "BTC/USD",
+            "interval_begin": "2022-06-12T08:09:10.123456Z",
+            "trades": 1,
+            "volume": 0.0001,
+            "vwap": 3000.3,
+            "interval": 5,
+            "timestamp": "2022-06-13T08:09:10.123456Z",
+          }
+        ],
+        "type": "snapshot"
+      };
+      // yield CryptoState(crypto, price);
 
-      final cryptoData =
-          sampleData.map((jsonData) => Data.fromJson(jsonData)).toList();
-      emit(CryptoState(cryptoData, price));
+      // print('object');
+      emit(CryptoState(crypto, price));
     });
   }
 
@@ -59,37 +67,43 @@ class CryptoBloc extends Bloc<CryptoEvent, CryptoState> {
     if (event is FetchCryptoData) {
       // Perform API call or data fetching logic here
       // For simplicity, let's use sample data
-      final sampleData = [
-        {
-          "close": 30001.4,
-          "high": 3000.9,
-          "low": 3000.1,
-          "open": 3000.3,
-          "symbol": "BTC/USD",
-          "intervalBegin": "2022-06-12T08:09:10.123456Z",
-          "trades": 1,
-          "volume": 0.0001,
-          "vwap": 3000.3,
-          "interval": 5,
-          "timestamp": "2022-06-13T08:09:10.123456Z",
-        }
-      ];
+      final sampleData = {
+        "channel": "ohlc",
+        "timestamp": "2022-06-13T08:09:10.123456Z",
+        "data": [
+          {
+            "close": 30001.4,
+            "high": 3000.9,
+            "low": 3000.1,
+            "open": 3000.3,
+            "symbol": "BTC/USD",
+            "interval_begin": "2022-06-12T08:09:10.123456Z",
+            "trades": 1,
+            "volume": 0.0001,
+            "vwap": 3000.3,
+            "interval": 5,
+            "timestamp": "2022-06-13T08:09:10.123456Z",
+          }
+        ],
+        "type": "snapshot"
+      };
 
-      final cryptoData =
-          sampleData.map((jsonData) => Data.fromJson(jsonData)).toList();
+      final Crypto? cryptoData = Crypto.fromJson(sampleData);
 
       yield CryptoState(cryptoData, price);
     } else if (event is ConnectToWebSocket) {
-      channel = IOWebSocketChannel.connect('wss://ws.kraken.com/v2');
-      subscribeToMarketDataStreams();
-      yield state; // Yield the current state to indicate the connection is established
+      // print('object');
+      // channel = IOWebSocketChannel.connect('wss://ws.kraken.com/v2');
+      // subscribeToMarketDataStreams();
+      // yield state; // Yield the current state to indicate the connection is established
       channel?.stream.listen((message) {
-        crypto = jsonDecode(message);
+        crypto = Crypto.fromJson(message);
         if (crypto?.data != null) {
           price = crypto?.data?[0].open;
         }
         add(FetchCryptoData()); // Trigger data update when WebSocket receives new data
       });
+      yield CryptoState(crypto, price);
     }
   }
 

@@ -20,6 +20,7 @@ class _HomeViewState extends State<HomeView> {
   void initState() {
     super.initState();
     _cryptoBloc = CryptoViewModel().cryptoBloc;
+    _cryptoBloc.subscribeToMarketDataStreams();
     _cryptoBloc.add(ConnectToWebSocket());
   }
 
@@ -35,7 +36,7 @@ class _HomeViewState extends State<HomeView> {
             bloc: _cryptoBloc,
             builder: (context, state) {
               if (state.cryptoData != null) {
-                final crypto = state.cryptoData?[0];
+                final crypto = state.cryptoData?.data?[0];
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
