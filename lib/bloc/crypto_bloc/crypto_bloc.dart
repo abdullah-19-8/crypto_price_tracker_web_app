@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:crypto_price_tracker_web_app/models/crypto_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:web_socket_channel/io.dart';
+import 'package:web_socket_channel/html.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 import 'crypto_event.dart';
@@ -16,7 +16,7 @@ class CryptoBloc extends Bloc<CryptoEvent, CryptoState> {
   CryptoBloc() : super(CryptoState(null, null)) {
     on<ConnectToWebSocket>((event, emit) {
       print('object');
-      channel = IOWebSocketChannel.connect('wss://ws.kraken.com/v2');
+      channel = HtmlWebSocketChannel.connect('wss://ws.kraken.com/v2');
       subscribeToMarketDataStreams();
       emit(
         state,
