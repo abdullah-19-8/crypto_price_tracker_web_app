@@ -6,14 +6,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../veiw-model/crypto_view_model.dart';
 
-class HomeView extends StatefulWidget {
-  const HomeView({super.key});
+class CryptoView extends StatefulWidget {
+  final String coin;
+  const CryptoView({super.key, required this.coin});
 
   @override
-  State<HomeView> createState() => _HomeViewState();
+  State<CryptoView> createState() => _CryptoViewState();
 }
 
-class _HomeViewState extends State<HomeView> {
+class _CryptoViewState extends State<CryptoView> {
   late CryptoBloc _cryptoBloc;
 
   @override
@@ -26,6 +27,7 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
+    print(widget.coin);
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
@@ -49,7 +51,6 @@ class _HomeViewState extends State<HomeView> {
                     Text('Trades: ${crypto?.trades}'),
                     Text('VWAP: ${crypto?.vwap}'),
                     Text('Interval: ${crypto?.interval}'),
-                    Text('Timestamp: ${crypto?.timestamp}'),
                   ],
                 );
               } else {

@@ -25,6 +25,7 @@ class CryptoBloc extends Bloc<CryptoEvent, CryptoState> {
         Map<String, dynamic> jsonMap = jsonDecode(message);
 
         if (jsonMap['data'] != null) {
+          print('updated');
           crypto = Crypto.fromJson(jsonMap);
         }
         add(FetchCryptoData()); // Trigger data update when WebSocket receives new data

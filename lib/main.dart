@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'bloc/crypto_bloc/crypto_bloc.dart';
-import 'view/home_view.dart';
+import 'routes/route_config.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(BlocProvider(
+    create: (context) => CryptoBloc(),
+    child: const MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -13,16 +16,17 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
+      routerConfig: RouteConfig.returnRouter(),
       debugShowCheckedModeBanner: false,
-      title: 'Flutter App',
+      title: 'Crypto price tracking web app',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: BlocProvider(
-        create: (context) => CryptoBloc(),
-        child: const HomeView(),
-      ),
+      // home: BlocProvider(
+      //   create: (context) => CryptoBloc(),
+      //   child: const HomeView(),
+      // ),
     );
   }
 }
