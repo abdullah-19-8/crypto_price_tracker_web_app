@@ -33,3 +33,19 @@ flutter run -d chrome
 1. Enter the desired cryptocurrency symbol in the search bar.
 2. Press the "Search" button or hit Enter to track the selected cryptocurrency.
 3. View real-time market data for the selected cryptocurrency.
+
+
+
+## Deploying
+
+flutter clean
+flutter pub get
+
+flutter build web --base-href /crypto_tracking/ --release
+
+cd build/web
+git init
+git add .
+git commit -m "Deploy"
+git remote add origin https://github.com/abdullah-19-8/crypto_tracking.git
+git push -u --force origin main
