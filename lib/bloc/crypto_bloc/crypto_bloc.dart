@@ -11,11 +11,9 @@ import 'crypto_state.dart';
 class CryptoBloc extends Bloc<CryptoEvent, CryptoState> {
   WebSocketChannel? channel;
   Crypto? crypto;
-  double? price;
 
-  CryptoBloc() : super(CryptoState(null, null)) {
+  CryptoBloc() : super(CryptoState(null)) {
     on<ConnectToWebSocket>((event, emit) {
-      print('object');
       channel = HtmlWebSocketChannel.connect('wss://ws.kraken.com/v2');
       subscribeToMarketDataStreams(event.coin);
       emit(
@@ -25,7 +23,6 @@ class CryptoBloc extends Bloc<CryptoEvent, CryptoState> {
         Map<String, dynamic> jsonMap = jsonDecode(message);
 
         if (jsonMap['data'] != null) {
-          print('updated');
           crypto = Crypto.fromJson(jsonMap);
         }
         add(FetchCryptoData()); // Trigger data update when WebSocket receives new data
@@ -33,13 +30,13 @@ class CryptoBloc extends Bloc<CryptoEvent, CryptoState> {
     });
 
     on<FetchCryptoData>((event, emit) {
-      emit(CryptoState(crypto, price));
+      emit(CryptoState(crypto));
     });
   }
 
   Stream<CryptoState> mapEventToState(CryptoEvent event) async* {
     if (event is ConnectToWebSocket) {
-      yield CryptoState(crypto, price);
+      yield CryptoState(crypto);
     }
   }
 
@@ -49,10 +46,11 @@ class CryptoBloc extends Bloc<CryptoEvent, CryptoState> {
     channel?.sink.add(json.encode({
       "method": "subscribe",
       "params": {
-        "channel": "ohlc",
-        "symbol": ["$coin/USD"],
-        "interval": 5
-      }
+        "channel": "ticker",
+        "snapshot": true,
+        "symbol": ["$coin/USD"]
+      },
+      "req_id": 1234567890
     }));
   }
 

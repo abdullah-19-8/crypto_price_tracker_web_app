@@ -7,7 +7,8 @@ class ErrorView extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Scaffold(
       body: Center(
-        child: Text("Error"),
+        child: Text(
+            "Error: Wrong url, please check your url\nyou have to write like this\"/#/crypto/:coinName\""),
       ),
     );
   }

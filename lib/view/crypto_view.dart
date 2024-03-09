@@ -21,13 +21,11 @@ class _CryptoViewState extends State<CryptoView> {
   void initState() {
     _cryptoBloc = CryptoViewModel().cryptoBloc;
     _cryptoBloc.add(ConnectToWebSocket(widget.coin.toUpperCase()));
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {});
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    print(widget.coin);
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
@@ -37,20 +35,18 @@ class _CryptoViewState extends State<CryptoView> {
           child: BlocBuilder<CryptoBloc, CryptoState>(
             bloc: _cryptoBloc,
             builder: (context, state) {
-              if (state.cryptoData?.data != null) {
-                final crypto = state.cryptoData?.data?[0];
+              final crypto = state.cryptoData?.data?[0];
+              if (crypto?.last != 'null' && crypto?.last != null) {
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text('Symbol: ${crypto?.symbol}'),
-                    Text('Open Price: ${crypto?.open}'),
-                    Text('High Price: ${crypto?.high}'),
-                    Text('Low Price: ${crypto?.low}'),
-                    Text('Close Price: ${crypto?.close}'),
+                    Text('current Price: ${crypto?.last}'),
+                    Text('Highest Price: ${crypto?.high}'),
+                    Text('Lowest Price: ${crypto?.low}'),
                     Text('Volume: ${crypto?.volume}'),
-                    Text('Trades: ${crypto?.trades}'),
+                    Text('change percentage: \%${crypto?.changePct}'),
                     Text('VWAP: ${crypto?.vwap}'),
-                    Text('Interval: ${crypto?.interval}'),
                   ],
                 );
               } else {
