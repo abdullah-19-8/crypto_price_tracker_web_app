@@ -1,10 +1,10 @@
 import 'dart:convert';
 
-import 'package:crypto_price_tracker_web_app/models/crypto_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:web_socket_channel/html.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
+import '../../models/crypto_model.dart';
 import 'crypto_event.dart';
 import 'crypto_state.dart';
 
@@ -19,6 +19,8 @@ class CryptoBloc extends Bloc<CryptoEvent, CryptoState> {
       emit(
         state,
       ); // Emit the current state to indicate the connection is established
+      // fixed
+
       channel?.stream.listen((message) {
         Map<String, dynamic> jsonMap = jsonDecode(message);
 

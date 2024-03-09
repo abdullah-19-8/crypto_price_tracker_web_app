@@ -29,7 +29,7 @@ class _CryptoViewState extends State<CryptoView> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Kraken WebSocket'),
+          title: const Text('Crypto Price Tracker Web App'),
         ),
         body: Center(
           child: BlocBuilder<CryptoBloc, CryptoState>(
@@ -39,14 +39,43 @@ class _CryptoViewState extends State<CryptoView> {
               if (crypto?.last != 'null' && crypto?.last != null) {
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text('Symbol: ${crypto?.symbol}'),
-                    Text('current Price: ${crypto?.last}'),
-                    Text('Highest Price: ${crypto?.high}'),
-                    Text('Lowest Price: ${crypto?.low}'),
-                    Text('Volume: ${crypto?.volume}'),
-                    Text('change percentage: \%${crypto?.changePct}'),
-                    Text('VWAP: ${crypto?.vwap}'),
+                    Text(
+                      'Symbol: ${crypto?.symbol}',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      'Current Price: \$${crypto?.last}',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      'Highest Price: \$${crypto?.high}',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    SizedBox(height: 20),
+                    Text(
+                      'Lowest Price: \$${crypto?.low}',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      'Volume: ${crypto?.volume}',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      'Change Percentage: %${crypto?.changePct}',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      'VWAP: \$${crypto?.vwap}',
+                      style: TextStyle(fontSize: 16),
+                    ),
                   ],
                 );
               } else {
