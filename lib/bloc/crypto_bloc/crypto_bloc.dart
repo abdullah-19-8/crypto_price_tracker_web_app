@@ -23,42 +23,15 @@ class CryptoBloc extends Bloc<CryptoEvent, CryptoState> {
       ); // Emit the current state to indicate the connection is established
       channel?.stream.listen((message) {
         Map<String, dynamic> jsonMap = jsonDecode(message);
-        crypto = Crypto.fromJson(jsonMap);
 
-        if (crypto?.data != null) {
-          price = crypto?.data?[0].open;
+        if (jsonMap['data'] != null) {
+          crypto = Crypto.fromJson(jsonMap);
         }
         add(FetchCryptoData()); // Trigger data update when WebSocket receives new data
       });
-      // Don't emit CryptoState here
     });
 
     on<FetchCryptoData>((event, emit) {
-      // Implement the logic to handle the FetchCryptoData event
-      // For simplicity, let's use sample data
-      final sampleData = {
-        "channel": "ohlc",
-        "timestamp": "2022-06-13T08:09:10.123456Z",
-        "data": [
-          {
-            "close": 30001.4,
-            "high": 3000.9,
-            "low": 3000.1,
-            "open": 3000.3,
-            "symbol": "BTC/USD",
-            "interval_begin": "2022-06-12T08:09:10.123456Z",
-            "trades": 1,
-            "volume": 0.0001,
-            "vwap": 3000.3,
-            "interval": 5,
-            "timestamp": "2022-06-13T08:09:10.123456Z",
-          }
-        ],
-        "type": "snapshot"
-      };
-      // yield CryptoState(crypto, price);
-
-      // print('object');
       emit(CryptoState(crypto, price));
     });
   }
