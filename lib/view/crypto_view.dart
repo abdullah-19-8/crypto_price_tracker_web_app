@@ -23,9 +23,9 @@ class _CryptoViewState extends State<CryptoView> {
     _cryptoBloc.add(ConnectToWebSocket(widget.coin.toUpperCase()));
     super.initState();
   }
-
   @override
   Widget build(BuildContext context) {
+    
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
