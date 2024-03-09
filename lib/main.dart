@@ -23,10 +23,6 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      // home: BlocProvider(
-      //   create: (context) => CryptoBloc(),
-      //   child: const HomeView(),
-      // ),
     );
   }
 }

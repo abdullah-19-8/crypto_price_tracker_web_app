@@ -50,7 +50,10 @@ class _CryptoViewState extends State<CryptoView> {
                   ],
                 );
               } else {
-                return Text('Loading...');
+                return Text(
+                  "Please wait for loading.\nif it took long check your input again, maybe it is wrong!",
+                  textAlign: TextAlign.center,
+                );
               }
             },
           ),
