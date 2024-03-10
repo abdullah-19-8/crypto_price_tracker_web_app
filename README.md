@@ -38,14 +38,13 @@ flutter run -d chrome
 
 ## Deploying
 
-flutter clean
-flutter pub get
-
-flutter build web --base-href /crypto_tracking/ --release
-
-cd build/web
-git init
-git add .
-git commit -m "Deploy"
-git remote add origin https://github.com/abdullah-19-8/crypto_tracking.git
-git push -u --force origin main
+- flutter clean.
+- flutter pub get
+- flutter build web --base-href /crypto_tracking/ --release
+  
+- cd build/web
+- git init
+- git add .
+- git commit -m "Deploy"
+- git remote add origin https://github.com/abdullah-19-8/crypto_tracking.git
+- git push -u --force origin main
